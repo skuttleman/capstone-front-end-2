@@ -1,28 +1,39 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 import App from './components/App';
 import Main from './components/Main';
-import makeReducers from './reducers/root-reducer';
-import { wrapDispatch } from './helpers/redux';
-
+import makeReducers from './reducers';
+import dispatchMiddleware from './helpers/dispatchMiddleware';
+import GameView from './components/game/GameView';
+import { playGameProps, editGameProps } from './constants/gameProps';
 
 const reducers = makeReducers({ routing: routerReducer });
-const store = createStore(reducers);
-const history = syncHistoryWithStore(browserHistory, store);
-const dispatch = wrapDispatch(store.dispatch);
+let store = createStore(reducers,
+  applyMiddleware(dispatchMiddleware)
+);
 
+const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
   <Provider store={store}>
     <div>
       <Router history={history}>
-        <Route path="/" dispatch={dispatch} component={App}>
-          <IndexRoute dispatch={dispatch} component={Main}/>
-          <Route path="foo" dispatch={dispatch} component={Main} />
+        <Route path="/" component={App}>
+          <IndexRoute component={Main}/>
+          <Route
+            path="/wips/:gameId"
+            component={GameView}
+            gameProps={editGameProps}
+          />
+          <Route
+            path="/games/:gameId"
+            component={GameView}
+            gameProps={playGameProps}
+          />
         </Route>
       </Router>
     </div>

@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import connectStore from '../helpers/redux-connector';
+import { getWIP } from '../actions';
 
 class Main extends Component {
   render() {
     return (
       <div>
-        Main Component
+        <p>Main Component</p>
+        <button onClick={()=>this.props.dispatch(getWIP(34))}>
+          Get Game
+        </button>
       </div>
     );
   }
 }
 
-export default connect(state => state)(Main);
+export default connectStore(Main);

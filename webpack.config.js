@@ -1,5 +1,15 @@
-/* eslint-disable */
+'use strict'
+const webpack = require('webpack');
 const path = require('path');
+
+let plugins = []
+if (process.env.NODE_ENV === 'production') {
+  plugins = [
+    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.optimize.DedupePlugin()
+  ]
+}
 
 module.exports = {
   entry: './src/app.js',
@@ -7,6 +17,7 @@ module.exports = {
     path: path.join(__dirname, 'build/js'),
     filename: 'app.js'
   },
+  plugins,
   module: {
     loaders: [{
       test: /\.js$/,
@@ -16,17 +27,3 @@ module.exports = {
     }]
   }
 };
-
-
-
-// var src = path.join(__dirname, '..', '..', 'src')
-// var fs = require('fs')
-// if (fs.existsSync(src)) {
-//   // Use the latest src
-//   module.exports.resolve = { alias: { 'react-router-redux': src } }
-//   module.exports.module.loaders.push({
-//     test: /\.js$/,
-//     loaders: ['babel'],
-//     include: src
-//   });
-// }

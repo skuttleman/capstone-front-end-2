@@ -24,22 +24,18 @@ export const checkLogin = hash => {
     let query = parseQueryString(queryString);
     localStorage.token = query.token;
     localStorage.user = parseUser(query.token);
-    if (user) {
-      window.location.href = '/';
+    if (localStorage.user) {
+      history.replaceState(null, document.title, "/");
     }
   }
 };
 
 const parseUser = token => {
-  if (token) {
-    try {
-      let user = atob(token.split('.')[1]);
-      if (typeof user === 'string') {
-        user = JSON.parse(user).user;
-        return JSON.stringify(user);
-      }
-    } finally {
-      return 'null';
-    }
+  try {
+    let user = atob(token.split('.')[1]);
+    user = JSON.parse(user).user;
+    return JSON.stringify(user);
+  } catch (error) {
+    return 'null';
   }
 };

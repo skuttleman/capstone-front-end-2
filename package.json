@@ -1,9 +1,10 @@
 {
-  "name": "rrr-basic-example",
-  "version": "0.0.0",
-  "repository": "reactjs/react-router-redux",
-  "license": "MIT",
+  "name": "capstone-front-end",
+  "version": "0.1.0",
+  "license": "ISC",
   "dependencies": {
+    "axios": "^0.11.0",
+    "moment": "^2.13.0",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-redux": "^4.3.0",
@@ -23,6 +24,7 @@
   },
   "scripts": {
     "start": "webpack && http-server ./build",
-    "dev": "webpack -w"
+    "dev": "webpack -w",
+    "style": "sass --scss --watch src/scss/main.scss:build/css/main.css"
   }
 }
