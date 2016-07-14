@@ -42,3 +42,9 @@ export const deepEquals = (item1, item2) => {
     return item1 === item2;
   }
 };
+
+export const listEquals = (list1, list2) => {
+  return list1.length === list2.length && list1.reduce((all, item1) => {
+    return all && !!list2.find(item2 => item2 === item1);
+  }, true);
+};

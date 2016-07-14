@@ -28,30 +28,30 @@ const mouseEvents = (game, fireEvent) => {
 };
 
 const onDown = (game, arg, fireEvent, { worldX: x, worldY: y }) => {
-  let normal = normalizePosition({ x, y });
+  let position = normalizePosition({ x, y });
   let block = normalizePosition({ x, y }, 50);
   if (!arg.downAt) {
-    arg.downAt = normal;
+    arg.downAt = position;
     let targets = getObjectsAtPosition(game, block);
-    fireEvent(game, MOUSE_DOWN, { position: normal, block, targets });
+    fireEvent(game, MOUSE_DOWN, { position, block, targets });
   }
 };
 
 const onUp = (game, arg, fireEvent, { worldX: x, worldY: y }) => {
-  let normal = normalizePosition({ x, y });
+  let position = normalizePosition({ x, y });
   let block = normalizePosition({ x, y }, 50);
   if (arg.downAt) {
     let targets = getObjectsAtPosition(game, block);
     delete arg.downAt;
-    fireEvent(game, MOUSE_UP, { position: normal, block, targets });
+    fireEvent(game, MOUSE_UP, { position, block, targets });
   }
 };
 
-const onTap = (game, arg, fireEvent, { worldX: x, worldY: y }) => {
-  let normal = normalizePosition({ x, y });
+const onTap = (game, arg, fireEvent, { worldX: x, worldY: y, leftButton }) => {
+  let position = normalizePosition({ x, y });
   let block = normalizePosition({ x, y }, 50);
   let targets = getObjectsAtPosition(game, block);
-  fireEvent(game, MOUSE_CLICK, { position: normal, block, targets });
+  fireEvent(game, MOUSE_CLICK, { position, block, targets, keys: leftButton });
 };
 
 const onMove = (game, arg, fireEvent, { worldX: x, worldY: y, isDown }) => {

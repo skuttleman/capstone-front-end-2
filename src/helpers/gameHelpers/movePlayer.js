@@ -3,7 +3,7 @@ import {
   addPositions, comparePositions, getObjectsAtPosition, incrementPosition, moveTowards
 } from './position';
 
-const ANIMATION_SPEED = 5;
+const ANIMATION_SPEED = 7;
 const MOVE_AMOUNT = 2;
 
 const movePlayer = (moving => game => {
@@ -22,15 +22,13 @@ export default movePlayer;
 
 const cursorKeyCheck = game => {
   let { left, right, up, down } = game.cursorKeys;
-  return [
-    { direction:  left, add: { x: -50, y:   0 } },
-    { direction: right, add: { x:  50, y:   0 } },
-    { direction:    up, add: { x:   0, y: -50 } },
-    { direction:  down, add: { x:   0, y:  50 } },
-  ].reduce((amount, { direction, add }) => {
-    if (direction.isDown) return addPositions(amount, add);
-    return amount;
-  }, { x: 0, y: 0 });
+  let amount = [
+    { direction:  left, amount: { x: -50, y:   0 } },
+    { direction: right, amount: { x:  50, y:   0 } },
+    { direction:    up, amount: { x:   0, y: -50 } },
+    { direction:  down, amount: { x:   0, y:  50 } },
+  ].find(({ direction, amount }) => direction.isDown);
+  return amount ? amount.amount : { x: 0, y: 0 };
 };
 
 const movePlayerIfPossible = (game, amount) => {

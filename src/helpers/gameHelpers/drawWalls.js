@@ -1,4 +1,4 @@
-import { comparePositions } from './position';
+import { comparePositions, toPosition } from './position';
 
 const isWallAt = (walls, { x, y }) => {
   return !!walls.find(wall => comparePositions(wall.position, { x, y }));
@@ -15,7 +15,7 @@ const calculateFrame = (wall, walls) => {
     isWallRight(walls, wall.position) * 8;
 };
 
-export default (game, walls, key) => {
+export default (game, walls, key = 'default') => {
   return walls.map(wall => {
     let newWall = game.add.sprite(wall.position.x, wall.position.y, wall.sprite);
     newWall.animations.add(key, [calculateFrame(wall, walls)]);
@@ -24,8 +24,6 @@ export default (game, walls, key) => {
     return newWall;
   });
 };
-
-const toPosition = ({ x, y }) => ({ position: { x, y }});
 
 export const updateFrames = (game, walls, key) => {
   let positions = walls.map(toPosition);

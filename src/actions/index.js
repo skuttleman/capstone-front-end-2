@@ -7,3 +7,4 @@ export {
 } from './notifications';
 export { default as updateUsersList } from './usersList'
 export { updateGamesList } from './gamesList';
+export { setEditMode, setActiveTool, openGameObjectProperties } from './editMode';

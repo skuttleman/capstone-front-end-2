@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import connectStore from '../../helpers/redux-connector';
 
 export default class Game extends Component {
   renderGameOptions(game) {

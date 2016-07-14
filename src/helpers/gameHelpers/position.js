@@ -49,3 +49,5 @@ export const getObjectsAtPosition = (game, position, exclude) => {
   let all = game.walls.concat(game.objects).concat(game.player);
   return all.filter(object => comparePositions(object, position) && object !== exclude);
 };
+
+export const toPosition = ({ x, y }) => ({ position: { x, y }});

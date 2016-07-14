@@ -1,3 +1,11 @@
+canvas, .tool, button {
+  cursor: pointer;
+}
+
 canvas {
   margin: 20px;
+}
+
+.tool.active {
+  background-color: yellow;
 }

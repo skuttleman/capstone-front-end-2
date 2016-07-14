@@ -1,6 +1,9 @@
 import drawPlayer from './drawPlayer';
-import drawWalls, { updateFrames } from './drawWalls';
-import drawObjects, { drawGhosts } from './drawObjects';
+// import drawWalls, { updateFrames } from './drawWalls';
+// import drawObjects, { drawGhosts } from './drawObjects';
+import drawSprites, { drawGhosts, updateFrames } from './drawSprites';
+let drawWalls = drawSprites;
+let drawObjects = drawSprites;
 import newGame from './initializeGame';
 
 export default class PhaserWrapper {
@@ -84,7 +87,7 @@ export default class PhaserWrapper {
 
   drawWalls() {
     this.destroyWalls();
-    this.walls = drawWalls(this.game, this.levelData.walls, 'default');
+    this.walls = drawWalls(this.game, this.levelData.walls, this.levelData.assets);
   }
 
   drawAllWalls(walls) {
@@ -95,7 +98,7 @@ export default class PhaserWrapper {
   }
 
   updateAllWallSprites() {
-    this.games.forEach(game => updateFrames(game, game.walls, 'default'));
+    this.games.forEach(game => updateFrames(game, game.walls));
   }
 
   drawGhosts(ghosts) {
@@ -104,9 +107,9 @@ export default class PhaserWrapper {
   }
 
   drawObjects() {
-    this.destroyObjects();
     let { game, levelData: { objects } } = this;
-    this.objects = drawObjects(game, objects);
+    this.destroyObjects();
+    this.objects = drawObjects(game, objects, this.levelData.assets);
   }
 
   drawPlayer() {
