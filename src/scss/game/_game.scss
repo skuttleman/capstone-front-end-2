@@ -2,10 +2,42 @@ canvas, .tool, button {
   cursor: pointer;
 }
 
-canvas {
-  margin: 20px;
-}
-
 .tool.active {
   background-color: yellow;
+}
+
+.game {
+  display: flex;
+  max-width: calc(#{$canvas-width} + 20px);
+  flex-wrap: wrap;
+  margin: 20px;
+  position: relative;
+  canvas {
+    margin: 0 5px 5px 0;
+  }
+  .scrollbar-container {
+    height: 8px;
+    width: 8px;
+    cursor: default;
+    &.scrollbar-container-x {
+      width: $canvas-width;
+    }
+    &.scrollbar-container-y {
+      height: $canvas-height;
+    }
+    &:hover .scrollbar, .scrollbar:hover, .scrollbar:active {
+      opacity: 1;
+      background-color: #555;
+    }
+    .scrollbar {
+      position: absolute;
+      border-radius: 4px;
+      background-color: #aaa;
+      opacity: 0.75;
+      z-index: 10;
+      width: 8px;
+      height: 8px;
+      transition: background-color 0.2s, opacity 0.2s;
+    }
+  }
 }

@@ -22,11 +22,11 @@ export const validatePosition = (position = {}) => {
 };
 
 export const normalizePosition = (position = {}, block = 1) => {
-  let { x, y } = position;
-  return {
-    x: (Number(x) || 0) - (Number(x) || 0) % block,
-    y: (Number(y) || 0) - (Number(y) || 0) % block
-  };
+  let [x, y] = [position.x, position.y].map(value => {
+    let number = Number(value) || 0;
+    return Math.floor(number / block) * block;
+  });
+  return { x, y };
 };
 
 export const moveTowards = (current, target, amount) => {

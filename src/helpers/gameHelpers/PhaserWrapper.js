@@ -1,10 +1,7 @@
 import drawPlayer from './drawPlayer';
-// import drawWalls, { updateFrames } from './drawWalls';
-// import drawObjects, { drawGhosts } from './drawObjects';
 import drawSprites, { drawGhosts, updateFrames } from './drawSprites';
-let drawWalls = drawSprites;
-let drawObjects = drawSprites;
 import newGame from './initializeGame';
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from '../../constants/gameProps';
 
 export default class PhaserWrapper {
   constructor({ name, dispatch, gameData, playerNumber, editMode, playable, getStore }) {
@@ -29,6 +26,35 @@ export default class PhaserWrapper {
     this.editMode = editMode;
     this.gameData = {...gameData};
     this.game = newGame(name, playerNumber || 1, this);
+  }
+
+  rebound(offset = 0) {
+    let { upperLeft, lowerRight } = this.gameData.worldBounds;
+    let bounds = [
+      upperLeft.x, upperLeft.y, lowerRight.x, lowerRight.y
+    ].map((value, i) => i <= 1 ? value - offset : value + (offset * 2));
+    this.game.world.setBounds.apply(this.game.world, bounds);
+    if (this.createSubs) this.createSubs.forEach(action => action());
+  }
+
+  resetBounds() {
+    let { upperLeft, lowerRight } = this.gameData.worldBounds;
+    upperLeft.x = 0;
+    upperLeft.y = 0;
+    lowerRight.x = CANVAS_WIDTH;
+    lowerRight.y = CANVAS_HEIGHT;
+  }
+
+  recalculateBounds(reset) {
+    let { upperLeft, lowerRight } = this.gameData.worldBounds;
+    if (reset) this.resetBounds();
+    this.allPre().forEach(({ position }) => {
+      ['x', 'y'].forEach(axis => {
+        upperLeft[axis] = Math.min(position[axis], upperLeft[axis]);
+        lowerRight[axis] = Math.max(position[axis] + 50, lowerRight[axis]);
+      });
+    });
+    this.rebound(this.editMode ? 50 : 0);
   }
 
   destroyGame() {
@@ -85,9 +111,15 @@ export default class PhaserWrapper {
     });
   }
 
+  drawSprites() {
+    this.drawWalls();
+    this.drawObjects();
+    this.drawPlayer();
+  }
+
   drawWalls() {
     this.destroyWalls();
-    this.walls = drawWalls(this.game, this.levelData.walls, this.levelData.assets);
+    this.walls = drawSprites(this.game, this.levelData.walls, this.levelData.assets);
   }
 
   drawAllWalls(walls) {
@@ -109,7 +141,7 @@ export default class PhaserWrapper {
   drawObjects() {
     let { game, levelData: { objects } } = this;
     this.destroyObjects();
-    this.objects = drawObjects(game, objects, this.levelData.assets);
+    this.objects = drawSprites(game, objects, this.levelData.assets);
   }
 
   drawPlayer() {
@@ -144,6 +176,12 @@ export default class PhaserWrapper {
   allPostOther() {
     let other = this.games.find(game => game !== this);
     return other ? other.allPost() : [];
+  }
+
+  subscribeCreated(action) {
+    this.createSubs = this.createSubs || [];
+    this.createSubs.push(action);
+    return {};
   }
 
   endGame() {

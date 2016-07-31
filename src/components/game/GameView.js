@@ -31,7 +31,8 @@ class GameView extends Component {
   renderGames(name, games) {
     return games.map((game, i) => {
       let number = game.playerNumber || (i + 1);
-      return <Game key={`game-${i}`} name={name} number={number} game={game} />;
+      let key = `game-${i}`;
+      return <Game key={key} name={name} number={number} game={game} />;
     });
   }
 

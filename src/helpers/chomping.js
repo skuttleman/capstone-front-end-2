@@ -48,3 +48,10 @@ export const listEquals = (list1, list2) => {
     return all && !!list2.find(item2 => item2 === item1);
   }, true);
 };
+
+export const minMaxDimension = axis => {
+  let [min, max, dimension] = (axis === 'x') ?
+    ['left', 'right', 'width'] :
+    ['top', 'bottom', 'height'];
+  return { min, max, dimension };
+};

@@ -10,7 +10,10 @@ export default class EditorTools extends Component {
 
   playTest() {
     this.props.games[0].playable = true;
-    this.props.games.forEach(game => game.editMode = false);
+    this.props.games.forEach(game => {
+      game.editMode = false
+      game.rebound(0);
+    });
     this.props.dispatch(setEditMode(false));
   }
 
@@ -18,6 +21,7 @@ export default class EditorTools extends Component {
     this.props.games.forEach(game => {
       game.playable = false;
       game.editMode = true;
+      game.rebound(50);
       game.redraw();
     });
     this.props.dispatch(setEditMode(true));

@@ -26,7 +26,7 @@ export const editorEventHandler = (game, event, end, start) => {
 };
 
 const editorMouseUp = (game, end) => {
-  setIsDragged(game, game.allPost(), false);
+  game.games.forEach(game => setIsDragged(game, game.allPost(), false));
 };
 
 const editorMouseDown = (game, { targets }) => {
@@ -59,6 +59,7 @@ const editorMouseClick = (game, end) => {
   } else if (others.concat(end.targets).length === 0) {
     add(game, end.block, tool.sprite, tool.frames);
   }
+  game.games.forEach(game => game.recalculateBounds());
 };
 
 const editorAltClick = editorMouseClick;
